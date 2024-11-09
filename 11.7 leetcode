@@ -1,0 +1,68 @@
+27.移出元素
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int current = 0;
+        for(int i = 0; i < nums.size(); i++) {
+            if(nums[i] != val) {
+                nums[current] = nums[i];
+                current++;
+            }
+        }
+        return current;
+    }
+};
+时间复杂度：0(n)
+从数组第一个数字遍历到最后一个数字，当该数字与目标删除数字不同时，重新写入数组
+当该数字与目标删除数字一致时，会被跳过，这个位置会被下一个不是目标删除的数字覆盖，从而删除这个数字
+最后，返回的数组长度就是与目标删除数字不同的数字个数
+
+28.找出字符串中第一个匹配项的下标
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        for(int i = 0; i < haystack.size(); i++) {
+            bool flag = true;
+            if(haystack[i] == needle[0]) {
+                for(int j = 0; j < needle.size(); j++) {
+                    if(haystack[i + j] != needle[j]) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag == true) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+};
+时间复杂度：O((haystack - needle + 1) * haystack)
+从haystack的第一个字母开始遍历，规定此时flag=true，当haystack中的字母与needle的第一个字母相同时,
+开始遍历needle，如果在needle遍历完成之前出现不同的字母，则表明haystack中没有完整包含needle，标明flag=false;
+当haystack遍历完成时，如果flag=true，返回i，即haystack字符串中出现第一个重复字母的下标
+
+35.搜索插入位置
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size() - 1;
+
+        while(left <= right) {
+            int mid = left + (right - left) / 2;
+            if(nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+};
+时间复杂度：O(log n)
+规定数组的第一个字符为left，最后一个字符为right；
+使用二分查找判断目标数字在数组中的位置
