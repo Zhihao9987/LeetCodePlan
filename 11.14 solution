@@ -1,0 +1,79 @@
+58. 最后一个单词长度
+class Solution {
+public:
+    int lengthOfLastWord(string s) {
+        stack<char> cur;
+        for(int i = s.size() - 1; i >= 0; i--) {
+            if(s[i] == ' ' && cur.size() > 0) {
+                return cur.size();
+            }
+            if(s[i] != ' ') {
+                cur.push(s[i]);
+            }
+        }
+    return cur.size();
+    }
+};
+用栈从后向前存储字符，当检测到第一个空格后（且此时栈内有字符，避免字符串以空格结尾的情况）
+输出当前栈的size，即栈内字符数量
+没有检测到空格时，将检测到的字符push进栈内存储
+时间复杂度：O(n)
+
+94.二叉树的中序遍历
+class Solution {
+private:
+void inOrder(vector<int>& left, TreeNode *root) {
+    if(root == nullptr){
+        return;
+    }
+        inOrder(left, root -> left);
+        left.push_back(root -> val);
+        inOrder(left, root -> right);
+}
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> cur;
+        inOrder(cur, root);
+        return cur;
+    }
+};
+如果当前节点为空，直接返回，用递归遍历左子树，然后回到当前节点，在用递归遍历右子树
+将中序遍历的结果存在cur向量中
+时间复杂度: O(n)
+
+100.相同的树
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(p && q && p->val == q->val) {
+            return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+        } else if (!p && !q){
+            return true;
+        }
+        return false;
+    }
+};
+情况1:p q都不为空 且 当前节点数值相等，再通过递归查看左子树和右子树是否相等，如果相等，返回true
+情况2:p q都为空，则也可以判断两个树相同，返回true
+
+101.对称树
+
+104.二叉树最大深度
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if(root == nullptr) {
+            return 0;
+        }
+        int leftdepth = maxDepth(root -> left);
+        int rightdepth = maxDepth(root -> right);
+        if(leftdepth >= rightdepth) {
+            return leftdepth + 1;
+        } else {
+            return rightdepth + 1;
+        }
+    }
+};
+如果当前节点为空，则深度为0
+用递归的方法查看左子树和右子树深度， 对比左右深度的大小，返回更大的深度
+但是要记得+1来包括当前节点的深度
