@@ -1,0 +1,129 @@
+367. 有效的完全平方数
+class Solution {
+public:
+    bool isPerfectSquare(int num) {
+        int left = 0;
+        int right = num;
+        int answer = 0;
+        while(left <= right) {
+            double mid = left + (right - left) / 2;
+            if(mid * mid == num) {
+                return true;
+            } else if(mid * mid < num) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+    return false;
+    }
+};
+时间复杂度：O(logn)
+用二分查找找到mid值，检查是否是num的平方根，是则返回true；
+若mid的平方小于num，则说明mid小了，再从后半部分二分找mid；
+若mid的平方大于num，则说明mid大了，再从前半部分二分找mid；
+如果直到left > right还是没有返回true，则表明num没有完全平方数
+
+374.caice数字大小
+class Solution {
+public:
+    int guessNumber(int n) {
+        int left = 0;
+        int right = n;
+        while(left <= right) {
+            int mid = left + (right - left) / 2;
+            int result = guess(mid);
+            if(result == 0) {
+             return mid;
+            } else if(result == -1) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return 0;
+    }
+};
+时间复杂度：O(logn)
+用二分查找找到猜测数字，代入已给的guess函数，根据题目，如果返回0，则当前数值为正确答案；
+如果返回-1，则说明正确答案比mid小，要从前半部分再次二分找mid;
+如果返回1，则说明正确答案比mid大，要从后半部分再次二分找mid;
+
+383.赎金信
+class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) {
+        vector<int> num(26);
+        for (int i = 0; i < ransomNote.size(); i++) {
+            num[ransomNote[i] - 'a']++;
+        }
+
+        for (int i = 0; i < magazine.size(); i++) {
+            num[magazine[i] - 'a']--;
+        }
+
+        for (int i = 0; i < num.size(); i++) {
+            if (num[i] > 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+};
+时间复杂度：O(n)
+规定一个vector，26个元素，分别对应a到z；
+先遍历ransomNote，存在哪个字母，哪个字母对应的计数+1；
+然后遍历，magazine存在哪个字母，哪个字母对应的计数-1；
+然后遍历num，如果num存在>0，那么说明ransom里有字母无法被抵消，返回false；
+如果遍历整个num后，不存在>0，则表明ransom内所有字母都可以被表达，返回true；
+
+387.字符串的第一个唯一字符
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        int num[26] = {0};
+        for(int i = 0; i < s.size(); i++) {
+            num[s[i] - 'a']++;
+        }
+
+        for(int i = 0; i< s.size(); i++) {
+            if((num[s[i] - 'a']) == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+};
+时间复杂度：O(n);
+规定一个数组num，记录每个字母出现的次数；
+遍历s，出现哪个字母，数组num中对应位置计数+1；
+再遍历sum，如果有计数仅一次的字母出现，返回当前位置；
+sum遍历完后，如果没有符合要求的，返回-1；
+
+389.找不同
+class Solution {
+public:
+    char findTheDifference(string s, string t) {
+        int num[26] = {0};
+        for(int i = 0; i < s.size(); i++) {
+            num[s[i] - 'a']++;
+        }
+
+        for(int j = 0; j < t.size(); j++) {
+            num[t[j] - 'a']--;
+        }
+
+        for(int k = 0; k < 26; k++) {
+            if(num[k] == -1) {
+                return k + 'a';
+            }
+        }
+        return 0;
+    }
+};
+时间复杂度：O(n);
+规定一个数组num，记录每个字母出现的次数；
+遍历s，出现哪个字母，数组num中对应位置计数+1；
+然后遍历t，出现哪个字母，哪个字母对应的计数-1；
+再遍历sum，计数为-1的位置为仅在t中存在的字母，返回当前位置的字母；
